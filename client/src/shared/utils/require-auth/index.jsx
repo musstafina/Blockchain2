@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import { selectToken } from '../../slices/user-slice'
+import { selectIsAuthenticated } from '../../slices/auth-slice'
 
 export const RequireAuth = ({ children }) => {
-	const token = useSelector(selectToken)
+	const isAuthenticated = useSelector(selectIsAuthenticated)
 
-	if (!token) {
+	if (!isAuthenticated) {
 		return <Navigate to={'/auth/login'} replace />
 	}
 

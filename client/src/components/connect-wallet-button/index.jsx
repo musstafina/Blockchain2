@@ -1,9 +1,6 @@
 import { ethers } from 'ethers'
 import { useState } from 'react'
-import { Button } from 'react-bootstrap'
-import walletConnected from '/assets/icons/wallet-connected.png'
-import walletLoading from '/assets/icons/wallet-loading.png'
-import wallet from '/assets/icons/wallet.png'
+import { ButtonView } from './button-view'
 
 export const ConnectWalletButton = () => {
 	const [walletAddress, setWalletAddress] = useState('')
@@ -30,23 +27,5 @@ export const ConnectWalletButton = () => {
 		}
 	}
 
-	let walletIcon = wallet
-	if (loadingStatus === 'loading') {
-		walletIcon = walletLoading
-	} else if (loadingStatus === 'connected') {
-		walletIcon = walletConnected
-	}
-
-	return (
-		<Button
-			variant='light'
-			className='w-100 p-0 d-flex flex-wrap justify-content-center align-items-center'
-			onClick={onClick}
-			disabled={loadingStatus === 'loading'}
-		>
-			<img src={walletIcon} className='w-100' alt='connect wallet' />
-			<div>{loadingStatus === 'connected' && 'Connected'}</div>
-			<div>{loadingStatus === 'disconnected' && 'Connect'}</div>
-		</Button>
-	)
+	return <ButtonView loadingStatus={loadingStatus} onClick={onClick} />
 }

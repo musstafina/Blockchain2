@@ -1,23 +1,21 @@
+import { Input } from 'antd'
 import { useField } from 'formik'
 import PropTypes from 'prop-types'
-import { Form } from 'react-bootstrap'
 
 export const TextInput = ({ label, ...props }) => {
 	const [field, meta] = useField(props)
 	return (
-		<Form.Group>
-			<Form.Label hidden={true}>{label}</Form.Label>
-			<Form.Control
-				className={'mt-3 text-center'}
+		<div style={{ marginTop: 10, textAlign: 'center' }}>
+			<label hidden={true}>{label}</label>
+			<Input
+				status={meta.touched && meta.error ? 'error' : meta.error}
 				type='text'
-				placeholder={label}
+				placeholder={meta.touched && meta.error ? meta.error : label}
 				{...props}
 				{...field}
+				style={{ textAlign: 'center' }}
 			/>
-			{meta.touched && meta.error ? (
-				<div className={'text-danger form-text text-center'}>{meta.error}</div>
-			) : null}
-		</Form.Group>
+		</div>
 	)
 }
 TextInput.propTypes = {
