@@ -72,6 +72,30 @@ class UserController {
             res.status(500).json({ message: 'Internal Server error' });
         }
     }
+
+    async searchUsersByName(req, res) {
+        try {
+            const { query } = req.query; // Assuming the search query is passed as a parameter named 'query'
+            if (!query) {
+                return res.status(400).json({ message: 'Search query is required' });
+            }
+
+            const regex = new RegExp(query.split(" ").join("|"), 'i'); // 'i' for case insensitive
+            const users = await User.find({
+                $or: [
+                    { firstName: { $regex: regex } },
+                    { lastName: { $regex: regex } }
+                ]
+            }).select('firstName lastName email personalPhoto biography'); // Adjust the fields as necessary for the frontend
+
+            res.json(users);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Internal Server error' });
+        }
+    }
+
+
 }
 
 module.exports = new UserController();
