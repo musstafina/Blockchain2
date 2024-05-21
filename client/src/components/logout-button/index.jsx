@@ -1,21 +1,24 @@
-import { Button } from 'react-bootstrap'
+import { RightSquareOutlined } from '@ant-design/icons'
+import { Button, Tooltip } from 'antd'
 import { useDispatch } from 'react-redux'
-import { logout } from '../../shared/slices/user-slice'
-import logoutIcon from '/assets/icons/logout.png'
+
+import { loggedOut } from '../../shared/slices/auth-slice'
 
 export const LogoutButton = () => {
 	const dispatch = useDispatch()
 
 	const onClick = () => {
-		dispatch(logout())
+		dispatch(loggedOut())
 	}
+
 	return (
-		<Button
-			variant='light'
-			className='w-100 p-0 d-flex justify-content-center align-items-center'
-			onClick={onClick}
-		>
-			<img src={logoutIcon} alt='logout button' />
-		</Button>
+		<Tooltip title='logout'>
+			<Button
+				onClick={onClick}
+				type='primary'
+				size='large'
+				icon={<RightSquareOutlined />}
+			/>
+		</Tooltip>
 	)
 }

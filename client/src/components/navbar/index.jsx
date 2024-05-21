@@ -1,19 +1,44 @@
-import { Navbar as BootstrapNavbar, Container, Nav } from 'react-bootstrap'
-import { NavLink } from 'react-router-dom'
+import { Layout, Menu } from 'antd'
+import { Link, useLocation } from 'react-router-dom'
+
+const items = [
+	{
+		key: '/',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/'>
+				home
+			</Link>
+		),
+	},
+	{
+		key: '/find-user',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/find-user'>
+				find user
+			</Link>
+		),
+	},
+	{
+		key: '/me',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/me'>
+				profile
+			</Link>
+		),
+	},
+]
 
 export const Navbar = () => {
+	const { pathname } = useLocation()
+
 	return (
-		<BootstrapNavbar sticky='top'>
-			<Container>
-				<Nav className='w-100 d-flex justify-content-around'>
-					<NavLink to='/' className={'nav-link'}>
-						home
-					</NavLink>
-					<NavLink to='/me' className={'nav-link'}>
-						profile
-					</NavLink>
-				</Nav>
-			</Container>
-		</BootstrapNavbar>
+		<Layout.Header style={{ display: 'flex', alignItems: 'center' }}>
+			<Menu
+				theme='dark'
+				items={items}
+				mode='horizontal'
+				selectedKeys={[pathname]}
+			/>
+		</Layout.Header>
 	)
 }

@@ -1,7 +1,8 @@
+import { Button, Spin, Typography } from 'antd'
 import { Form, Formik } from 'formik'
-import { Button, Spinner } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
+
 import { useLoginMutation } from '../../shared/api'
 import { TextInput } from './Text-input'
 
@@ -23,6 +24,7 @@ export const LoginForm = () => {
 		await login(values)
 		navigate('/')
 	}
+
 	return (
 		<>
 			<Formik
@@ -31,27 +33,38 @@ export const LoginForm = () => {
 				validationSchema={validationSchema}
 			>
 				<Form>
-					<h1 className='h1 text-center'>Login</h1>
+					<Typography.Title style={{ textAlign: 'center' }}>
+						Login
+					</Typography.Title>
+
 					<TextInput name='email' label={'enter email'} />
 					<TextInput name='password' type='password' label={'enter password'} />
+
 					<Button
-						className='d-block mx-auto mt-3'
-						type='submit'
-						variant='outline-secondary'
+						type='primary'
+						htmlType='submit'
+						style={{ margin: '20px auto 0', display: 'block' }}
 					>
 						login
 					</Button>
-					<Link
-						className='d-block mx-auto mt-3 btn btn-outline-secondary'
-						to='/auth/register'
-						style={{ width: 150 }}
+
+					<Typography.Text
+						style={{ textAlign: 'center', display: 'block', marginTop: 20 }}
 					>
-						go to register
-					</Link>
+						Don`t have account?
+						<Link to='/auth/register' style={{ marginLeft: 4 }}>
+							register
+						</Link>
+					</Typography.Text>
 				</Form>
 			</Formik>
 
-			{isUninitialized || <Spinner className='d-block mx-auto mt-5' />}
+			{isUninitialized || (
+				<Spin
+					size='large'
+					style={{ margin: '20px auto 0', display: 'block' }}
+				/>
+			)}
 		</>
 	)
 }

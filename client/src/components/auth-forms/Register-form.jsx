@@ -1,7 +1,8 @@
+import { Button, Typography } from 'antd'
 import { Form, Formik } from 'formik'
-import { Button } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
+
 import { TextInput } from './Text-input'
 
 const initialValues = {
@@ -51,27 +52,33 @@ export const RegisterForm = () => {
 			validationSchema={validationSchema}
 		>
 			<Form>
-				<h1 className='h1 text-center'>Register</h1>
+				<Typography.Title style={{ textAlign: 'center' }}>
+					Register
+				</Typography.Title>
+
 				<TextInput name='firstName' label={'enter firstName'} />
 				<TextInput name='lastName' label={'enter lastName'} />
 				<TextInput name='email' label={'enter email'} />
 				<TextInput name='password' type='password' label={'enter password'} />
 				<TextInput name='biography' label={'enter biography'} />
 				<TextInput name='personalPhoto' label={'enter profilePicture'} />
+
 				<Button
-					className='d-block mx-auto mt-3'
-					type='submit'
-					variant='outline-secondary'
+					type='primary'
+					htmlType='submit'
+					style={{ margin: '20px auto 0', display: 'block' }}
 				>
-					register
+					Register
 				</Button>
-				<Link
-					className='d-block mx-auto mt-3 btn btn-outline-secondary'
-					to='/auth/login'
-					style={{ width: 150 }}
+
+				<Typography.Text
+					style={{ textAlign: 'center', display: 'block', marginTop: 20 }}
 				>
-					go to login
-				</Link>
+					Already have account?
+					<Link to='/auth/login' style={{ marginLeft: 4 }}>
+						login
+					</Link>
+				</Typography.Text>
 			</Form>
 		</Formik>
 	)

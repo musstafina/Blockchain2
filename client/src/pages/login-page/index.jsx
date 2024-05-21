@@ -1,12 +1,21 @@
+import { Helmet } from 'react-helmet'
+
+import { Col, Row } from 'antd'
 import { LoginForm } from '../../components/auth-forms'
 
 const LoginPage = () => {
 	return (
-		<section className='pt-5'>
-			<div className='offset-3 col-6'>
-				<LoginForm />
-			</div>
-		</section>
+		<>
+			<Helmet>
+				<title>Login</title>
+			</Helmet>
+
+			<Row>
+				<Col offset={8} span={8}>
+					<LoginForm />
+				</Col>
+			</Row>
+		</>
 	)
 }
 

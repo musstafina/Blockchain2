@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { logout } from '../../shared/slices/user-slice'
+
+import { loggedOut } from '../../shared/slices/auth-slice'
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: 'http://localhost:6600/api',
 	credentials: 'include',
-	prepareHeaders: (headers, { getState }) => {
-		const token = getState().user.token
+	prepareHeaders: headers => {
+		const token = localStorage.getItem('token')
 		if (token) {
 			headers.set('authorization', `Bearer ${token}`)
 		}
@@ -16,7 +17,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
 	let result = await baseQuery(args, api, extraOptions)
 	if (result.error && result.error.status === 401) {
-		api.dispatch(logout())
+		api.dispatch(loggedOut())
 	}
 	return result
 }

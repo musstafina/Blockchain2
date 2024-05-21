@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/store'
-import { setUser } from '../slices/user-slice'
+import { loggedIn } from '../slices/auth-slice'
 
 export const authApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -12,9 +12,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
 			onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
 				try {
 					const {
-						data: { user, token },
+						data: { token },
 					} = await queryFulfilled
-					dispatch(setUser({ user, token }))
+
+					dispatch(loggedIn({ token }))
 				} catch (error) {
 					console.log(error)
 				}
