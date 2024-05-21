@@ -9,5 +9,6 @@ router.post('/api/login', userController.login)
 router.get('/api/profile/me', verifyToken, userController.getMyProfile);
 router.get('/api/friends', verifyToken, userController.getMyFriends);
 router.get('/api/:id', verifyToken, userController.getUserData); 
+router.get('/api/users/search', verifyToken, userController.searchUsersByName);
 
 module.exports = router;
