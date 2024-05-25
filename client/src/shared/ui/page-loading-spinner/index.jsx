@@ -1,9 +1,9 @@
-import { Spinner } from 'react-bootstrap'
+import { Spin } from 'antd'
 
 export const PageLoadingSpinner = () => {
 	return (
 		<div className='d-flex justify-content-center p-5'>
-			<Spinner />
+			<Spin />
 		</div>
 	)
 }
