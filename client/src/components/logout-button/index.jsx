@@ -2,7 +2,7 @@ import { RightSquareOutlined } from '@ant-design/icons'
 import { Button, Tooltip } from 'antd'
 import { useDispatch } from 'react-redux'
 
-import { loggedOut } from '../../shared/slices/auth-slice'
+import { loggedOut } from '../../shared/slices/user-slice'
 
 export const LogoutButton = () => {
 	const dispatch = useDispatch()
