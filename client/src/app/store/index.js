@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { authReducer } from '../../shared/slices/auth-slice'
 import { findUserPageReducer } from '../../shared/slices/find-user-page-slice'
+import { userReducer } from '../../shared/slices/user-slice'
 import { apiSlice } from './api-slice'
 
 export const store = configureStore({
 	reducer: {
-		auth: authReducer,
+		user: userReducer,
 		findUserPage: findUserPageReducer,
 		[apiSlice.reducerPath]: apiSlice.reducer,
 	},
