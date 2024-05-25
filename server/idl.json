@@ -1,0 +1,37 @@
+{
+	"version": "0.1.0",
+	"name": "friendship_program",
+	"instructions": [
+		{
+			"name": "sendRequest",
+			"accounts": [
+				{ "name": "request", "isMut": true, "isSigner": true },
+				{ "name": "initiator", "isMut": true, "isSigner": true },
+				{ "name": "receiver", "isMut": false, "isSigner": false },
+				{ "name": "systemProgram", "isMut": false, "isSigner": false }
+			],
+			"args": []
+		},
+		{
+			"name": "acceptRequest",
+			"accounts": [
+				{ "name": "request", "isMut": true, "isSigner": false },
+				{ "name": "receiver", "isMut": false, "isSigner": true }
+			],
+			"args": []
+		}
+	],
+	"accounts": [
+		{
+			"name": "FriendRequest",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{ "name": "initiator", "type": "publicKey" },
+					{ "name": "receiver", "type": "publicKey" },
+					{ "name": "accepted", "type": "bool" }
+				]
+			}
+		}
+	]
+}
