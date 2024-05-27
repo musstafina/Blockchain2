@@ -1,4 +1,4 @@
-const blockchainInteractions = require('../blockchainInteractions/solana-connection');
+const blockchainInteractions = require('../../blockchainInteractions/solana-connection');
 
 class FriendshipManager {
 	async initiateFriendship(req, res) {

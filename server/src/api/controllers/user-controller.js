@@ -1,5 +1,5 @@
 const User = require('../models/User-model');
-const AuthService = require('../services/auth-service');
+const UserService = require('../services/user-service');
 
 class UserController {
 	async register(req, res) {
@@ -13,7 +13,7 @@ class UserController {
 					.json({ message: 'This email is already registered' });
 			}
 
-			const newUser = await AuthService.register(userData);
+			const newUser = await UserService.register(userData);
 			res.status(201).json({
 				message: 'Registration successful!',
 				user: newUser,
@@ -30,7 +30,7 @@ class UserController {
 		try {
 			const { email, password } = req.body;
 
-			const loginResponse = await AuthService.login(email, password);
+			const loginResponse = await UserService.login(email, password);
 			res.status(200).json({
 				message: 'Login successful!',
 				...loginResponse,
@@ -43,10 +43,18 @@ class UserController {
 
 	async getUserData(req, res) {
 		try {
-			const user = await User.findById(req.params.id);
+			const visitorId = req.user.userId;
+			const profileId = req.params.id;
+
+			const user = await User.findById(profileId);
 			if (!user) {
 				return res.status(404).json({ message: 'User not found' });
 			}
+
+			if (visitorId !== profileId) {
+				await UserService.addVisitor(profileId, visitorId);
+			}
+
 			const { password, ...userData } = user.toObject();
 			res.json(userData);
 		} catch (err) {
@@ -90,22 +98,40 @@ class UserController {
 
 	async searchUsersByName(req, res) {
 		try {
-			const { query } = req.query; // Assuming the search query is passed as a parameter named 'query'
+			const { query } = req.query;
 			if (!query) {
 				return res
 					.status(400)
 					.json({ message: 'Search query is required' });
 			}
 
-			const regex = new RegExp(query.split(' ').join('|'), 'i'); // 'i' for case insensitive
+			const regex = new RegExp(query.split(' ').join('|'), 'i');
 			const users = await User.find({
 				$or: [
 					{ firstName: { $regex: regex } },
 					{ lastName: { $regex: regex } },
 				],
-			}).select('firstName lastName email personalPhoto biography'); // Adjust the fields as necessary for the frontend
+			}).select('firstName lastName email personalPhoto biography');
 
 			res.json(users);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ message: 'Internal Server error' });
+		}
+	}
+
+	async getAllVisitors(req, res) {
+		try {
+			const user = await User.findById(req.params.id).populate(
+				'visitors.visitorInfo',
+				'firstName lastName email personalPhoto'
+			);
+
+			if (!user) {
+				return res.status(404).json({ message: 'User not found' });
+			}
+
+			res.json({ visitors: user.visitors });
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ message: 'Internal Server error' });
