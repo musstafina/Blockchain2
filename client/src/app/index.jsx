@@ -11,5 +11,3 @@ export const App = () => {
 		</Provider>
 	)
 }
-
-// TODO: use asyncThunk instead rtk query
