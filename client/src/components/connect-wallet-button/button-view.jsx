@@ -2,16 +2,21 @@ import { WalletFilled, WalletOutlined } from '@ant-design/icons'
 import { Button, Tooltip, Typography } from 'antd'
 import PropTypes from 'prop-types'
 
-export const ButtonView = ({ loadingStatus, onClick }) => {
+import {
+	CONNECTED_STATUS,
+	LOADING_STATUS,
+} from '../../shared/constants/wallet-loading-statuses'
+
+export const ButtonView = ({ loadingStatus, onClick, ...props }) => {
 	let walletIcon
 	let tooltipTitle = ''
 	switch (loadingStatus) {
-		case 'loading': {
+		case LOADING_STATUS: {
 			walletIcon = <WalletFilled />
 			tooltipTitle = 'connecting...'
 			break
 		}
-		case 'connected': {
+		case CONNECTED_STATUS: {
 			walletIcon = <WalletOutlined />
 			tooltipTitle = 'disconnect'
 			break
@@ -24,6 +29,7 @@ export const ButtonView = ({ loadingStatus, onClick }) => {
 
 	return (
 		<div
+			{...props}
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
@@ -55,4 +61,5 @@ export const ButtonView = ({ loadingStatus, onClick }) => {
 ButtonView.propTypes = {
 	loadingStatus: PropTypes.string,
 	onClick: PropTypes.func,
+	props: PropTypes.object,
 }

@@ -1,6 +1,7 @@
 import { Card, Col, Divider, Row, Typography } from 'antd'
 import { Helmet } from 'react-helmet'
 
+import { LogoutButton } from '../../components/logout-button'
 import { PostsList } from '../../components/posts-list'
 import { UserCard } from '../../components/user-card'
 import { UserList } from '../../components/user-list'
@@ -38,6 +39,7 @@ const ProfilePage = () => {
 						email={email}
 						profilePicture={personalPhoto}
 					/>
+					<LogoutButton />
 				</Col>
 				<Col offset={1} span={10}>
 					<PostsList />

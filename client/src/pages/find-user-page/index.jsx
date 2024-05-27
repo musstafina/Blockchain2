@@ -39,7 +39,7 @@ const FindUserPage = () => {
 			</Row>
 			<Row>
 				<Col offset={6} span={12}>
-					<UserList altLabel loading={isLoading} users={data} />
+					<UserList loading={isLoading} users={data} />
 				</Col>
 			</Row>
 		</>

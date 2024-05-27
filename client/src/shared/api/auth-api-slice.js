@@ -1,5 +1,5 @@
 import { apiSlice } from '../../app/store'
-import { loggedIn } from '../slices/auth-slice'
+import { loggedIn } from '../slices/user-slice'
 
 export const authApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({

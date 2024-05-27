@@ -1,31 +1,52 @@
-import { ethers } from 'ethers'
-import { useState } from 'react'
+import PropTypes from 'prop-types'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { CONNECTED_STATUS } from '../../shared/constants/wallet-loading-statuses'
+import {
+	connectWallet,
+	disconnectWallet,
+	selectWalletAddressLoadingStatus,
+} from '../../shared/slices/user-slice'
+import { ButtonTextView } from './button-text-view'
 import { ButtonView } from './button-view'
 
-export const ConnectWalletButton = () => {
-	const [walletAddress, setWalletAddress] = useState('')
-	const [loadingStatus, setLoadingStatus] = useState('disconnected')
+export const ConnectWalletButton = ({ type, ...props }) => {
+	const loadingStatus = useSelector(selectWalletAddressLoadingStatus)
+	const dispatch = useDispatch()
 
-	const onClick = async () => {
-		setLoadingStatus('loading')
-		try {
-			if (loadingStatus === 'connected') {
-				setLoadingStatus('disconnected')
-				setWalletAddress('')
-				return
-			}
-
-			const provider = new ethers.BrowserProvider(window.ethereum)
-			const signer = await provider.getSigner()
-			const _walletAddress = await signer.getAddress()
-			console.log('Connected wallet address: ', _walletAddress)
-			setWalletAddress(_walletAddress)
-			setLoadingStatus('connected')
-		} catch (error) {
-			console.log(error)
-			setLoadingStatus('disconnected')
+	const onClick = () => {
+		if (loadingStatus === CONNECTED_STATUS) {
+			dispatch(disconnectWallet())
+			return
 		}
+		dispatch(connectWallet())
 	}
 
-	return <ButtonView loadingStatus={loadingStatus} onClick={onClick} />
+	switch (type) {
+		case 'icon': {
+			return (
+				<ButtonView
+					{...props}
+					loadingStatus={loadingStatus}
+					onClick={onClick}
+				/>
+			)
+		}
+		case 'text': {
+			return (
+				<ButtonTextView
+					{...props}
+					loadingStatus={loadingStatus}
+					onClick={onClick}
+				/>
+			)
+		}
+		default: {
+			return null
+		}
+	}
+}
+ConnectWalletButton.propTypes = {
+	type: PropTypes.oneOf(['icon', 'text']),
+	props: PropTypes.object,
 }

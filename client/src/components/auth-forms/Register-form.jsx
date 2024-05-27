@@ -3,6 +3,13 @@ import { Form, Formik } from 'formik'
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
+import { useSelector } from 'react-redux'
+import { CONNECTED_STATUS } from '../../shared/constants/wallet-loading-statuses'
+import {
+	selectWalletAddress,
+	selectWalletAddressLoadingStatus,
+} from '../../shared/slices/user-slice'
+import { ConnectWalletButton } from '../connect-wallet-button'
 import { TextInput } from './Text-input'
 
 const initialValues = {
@@ -24,6 +31,8 @@ const validationSchema = yup.object({
 })
 
 export const RegisterForm = () => {
+	const walletStatus = useSelector(selectWalletAddressLoadingStatus)
+	const walletAddress = useSelector(selectWalletAddress)
 	const navigate = useNavigate()
 
 	const onSubmit = async values => {
@@ -34,7 +43,10 @@ export const RegisterForm = () => {
 				'Content-Type': 'application/json',
 			},
 			mode: 'cors',
-			body: JSON.stringify(values),
+			body: JSON.stringify({
+				...values,
+				walletAddress,
+			}),
 		}
 		const response = await fetch(
 			'http://localhost:6600/api/register',
@@ -62,11 +74,13 @@ export const RegisterForm = () => {
 				<TextInput name='password' type='password' label={'enter password'} />
 				<TextInput name='biography' label={'enter biography'} />
 				<TextInput name='personalPhoto' label={'enter profilePicture'} />
+				<ConnectWalletButton type={'text'} className={'w-100 mt-3'} />
 
 				<Button
 					type='primary'
 					htmlType='submit'
 					style={{ margin: '20px auto 0', display: 'block' }}
+					disabled={walletStatus !== CONNECTED_STATUS}
 				>
 					Register
 				</Button>
