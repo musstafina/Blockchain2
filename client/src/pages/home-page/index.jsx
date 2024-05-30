@@ -1,49 +1,38 @@
-import { PublicKey } from '@solana/web3.js'
-import { Button } from 'antd'
-import {
-	addFriend,
-	connectWallet,
-	getTransactionHistory,
-} from '../../shared/solana-service'
+import { Col, Row } from 'antd'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { PostsList } from '../../components/posts'
+
+import { useBlog } from '../../app/solana'
 
 const HomePage = () => {
+	const [posts, setPosts] = useState([])
+	const { getAllPosts } = useBlog()
+
+	useEffect(() => {
+		getAllPosts().then(posts => {
+			if (posts) {
+				setPosts(
+					posts.map(({ account }) => ({
+						id: account.id,
+						title: account.title,
+						content: account.content,
+					}))
+				)
+			}
+		})
+	}, [getAllPosts])
+
 	return (
 		<>
-			<h1 className='h1 text-center mt-5'>home page</h1>
-			<Button type='primary' onClick={connectWallet}>
-				connectWallet
-			</Button>
-			<Button
-				type='primary'
-				onClick={() => {
-					const { publicKey } = window.solana
-					// console.log('publicKey', publicKey && publicKey.toString())
-					const walletPublicKey = new PublicKey(publicKey.toString())
-					console.log(walletPublicKey)
-					console.log(publicKey)
-				}}
-			>
-				log publicKey
-			</Button>
-			<Button
-				type='primary'
-				onClick={() =>
-					addFriend('5sY7zicgjDMeAsrE48po6yofEzv6GxdLTW9ACQWs2TtA')
-				}
-			>
-				add to friends
-			</Button>
-			<Button type='primary' onClick={() => console.log(window.solana)}>
-				log window solana
-			</Button>
-			<Button
-				type='primary'
-				onClick={() => {
-					getTransactionHistory()
-				}}
-			>
-				log transaction history
-			</Button>
+			<Helmet>
+				<title>all posts</title>
+			</Helmet>
+			<Row>
+				<Col offset={6} span={12}>
+					<PostsList posts={posts} />
+				</Col>
+			</Row>
 		</>
 	)
 }

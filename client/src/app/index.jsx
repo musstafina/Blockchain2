@@ -1,13 +1,12 @@
-import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import { router } from '../pages'
-import { store } from './store'
+import { PhantomWalletProvider } from './solana'
 import './style/index.sass'
 
 export const App = () => {
 	return (
-		<Provider store={store}>
+		<PhantomWalletProvider>
 			<RouterProvider router={router} />
-		</Provider>
+		</PhantomWalletProvider>
 	)
 }
