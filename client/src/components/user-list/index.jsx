@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 export const UserList = ({ users, altLabel, ...props }) => {
-	console.log(users)
 	return (
 		<List
 			{...props}

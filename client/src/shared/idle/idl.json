@@ -48,6 +48,17 @@
 				{ "name": "authority", "isMut": false, "isSigner": true }
 			],
 			"args": []
+		},
+		{
+			"name": "respondToFriendRequest",
+			"accounts": [
+				{ "name": "userAccount", "isMut": true, "isSigner": false },
+				{ "name": "friendAccount", "isMut": true, "isSigner": false },
+				{ "name": "authority", "isMut": true, "isSigner": true },
+				{ "name": "friend", "isMut": false, "isSigner": false },
+				{ "name": "systemProgram", "isMut": false, "isSigner": false }
+			],
+			"args": [{ "name": "accept", "type": "bool" }]
 		}
 	],
 	"accounts": [
@@ -93,6 +104,6 @@
 		}
 	],
 	"metadata": {
-		"address": "D86Fyq1e9pbmwe3FkY2YmCBobYvi1Le1ybtaqqKPsRCi"
+		"address": "BLzM71nsqSUnF7wdtBQ8GazSx1TnV9ozHtzXHNtZuupa"
 	}
 }

@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
-import { AuthLayout, RootLayout } from './layouts'
+import { RootLayout } from './layouts'
 
 const LoginPage = lazy(() => import('./login-page'))
 const RegisterPage = lazy(() => import('./register-page'))
@@ -38,7 +38,6 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: '/auth',
-				element: <AuthLayout />,
 				children: [
 					{
 						path: 'login',

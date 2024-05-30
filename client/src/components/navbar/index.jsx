@@ -3,18 +3,10 @@ import { Link, useLocation } from 'react-router-dom'
 
 const items = [
 	{
-		key: '/auth/register',
+		key: '/me',
 		label: (
-			<Link style={{ textDecoration: 'none' }} to='/auth/register'>
-				register
-			</Link>
-		),
-	},
-	{
-		key: '/auth/login',
-		label: (
-			<Link style={{ textDecoration: 'none' }} to='/auth/login'>
-				login
+			<Link style={{ textDecoration: 'none' }} to='/me'>
+				profile
 			</Link>
 		),
 	},
@@ -34,19 +26,28 @@ const items = [
 			</Link>
 		),
 	},
-	{
-		key: '/me',
-		label: (
-			<Link style={{ textDecoration: 'none' }} to='/me'>
-				profile
-			</Link>
-		),
-	},
+
 	{
 		key: '/create-post',
 		label: (
 			<Link style={{ textDecoration: 'none' }} to='/create-post'>
 				create post
+			</Link>
+		),
+	},
+	{
+		key: '/auth/register',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/auth/register'>
+				Register
+			</Link>
+		),
+	},
+	{
+		key: '/auth/login',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/auth/login'>
+				Connect wallet
 			</Link>
 		),
 	},

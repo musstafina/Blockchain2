@@ -13,7 +13,6 @@ const AllUsersPage = () => {
 	useEffect(() => {
 		getAllUsers().then(users => {
 			if (users) {
-				console.log(users)
 				setUsers(
 					users.map(user => ({
 						name: user.account.name,
