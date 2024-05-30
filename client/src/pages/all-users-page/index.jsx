@@ -13,11 +13,13 @@ const AllUsersPage = () => {
 	useEffect(() => {
 		getAllUsers().then(users => {
 			if (users) {
+				console.log(users)
 				setUsers(
 					users.map(user => ({
 						name: user.account.name,
 						avatar: user.account.avatar,
-						publicKey: user.account.authority.toString(),
+						authority: user.account.authority.toString(),
+						publicKey: user.publicKey.toString(),
 					}))
 				)
 			}

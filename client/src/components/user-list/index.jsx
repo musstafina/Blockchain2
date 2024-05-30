@@ -31,6 +31,7 @@ UserList.propTypes = {
 	users: PropTypes.arrayOf(
 		PropTypes.shape({
 			publicKey: PropTypes.string,
+			authority: PropTypes.string,
 			name: PropTypes.string,
 			avatar: PropTypes.string,
 		})

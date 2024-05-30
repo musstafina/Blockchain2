@@ -147,6 +147,27 @@ export const BlogProvider = ({ children }) => {
 		}
 	}
 
+	const sendFriendRequest = async receiverWalletAddress => {
+		if (!program || !publicKey) return
+		const receiverPublicKey = new PublicKey(receiverWalletAddress)
+		try {
+			const [userPda] = findProgramAddressSync(
+				[utf8.encode('user'), publicKey.toBuffer()],
+				program.programId
+			)
+			await program.methods
+				.sendFriendRequest()
+				.accounts({
+					sender: userPda,
+					receiver: receiverPublicKey,
+					authority: publicKey,
+				})
+				.rpc()
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	return (
 		<BlogContext.Provider
 			value={{
@@ -156,6 +177,7 @@ export const BlogProvider = ({ children }) => {
 				getAllPosts,
 				getUserByPublicKey,
 				getAllUsers,
+				sendFriendRequest,
 			}}
 		>
 			{children}

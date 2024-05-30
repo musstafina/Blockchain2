@@ -1,6 +1,7 @@
 import { Card, Col, Divider, Row, Typography } from 'antd'
 import { Helmet } from 'react-helmet'
 
+import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useState } from 'react'
 import { useBlog } from '../../app/solana'
 import { PostsList } from '../../components/posts'
@@ -17,16 +18,39 @@ const friends = [
 ]
 
 const ProfilePage = () => {
-	const { getMyProfile } = useBlog()
+	const { getMyProfile, getAllPosts } = useBlog()
+	const wallet = useWallet()
 	const [user, setUser] = useState(null)
+	const [posts, setPosts] = useState([])
 
 	useEffect(() => {
 		getMyProfile().then(data => {
 			if (data) {
+				console.log(data)
 				setUser({
 					name: data.name,
 					avatar: data.avatar,
+					friends: data.friends,
+					friendRequests: data.friendRequests,
 				})
+			}
+		})
+	}, [])
+
+	useEffect(() => {
+		getAllPosts().then(posts => {
+			if (posts) {
+				posts = posts.map(post => ({
+					authority: post.account.authority.toString(),
+					title: post.account.title,
+					content: post.account.content,
+				}))
+
+				posts = posts.filter(
+					post => post.authority === wallet.publicKey.toString()
+				)
+
+				setPosts(posts)
 			}
 		})
 	}, [])
@@ -46,7 +70,7 @@ const ProfilePage = () => {
 					<UserCard name={name} avatar={avatar} />
 				</Col>
 				<Col offset={1} span={10}>
-					<PostsList />
+					<PostsList posts={posts} />
 				</Col>
 
 				<Col offset={1} span={4}>
