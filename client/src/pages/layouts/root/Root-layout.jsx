@@ -43,7 +43,7 @@ export const RootLayout = () => {
 	// }, [])
 
 	return (
-		<Layout style={{ minHeight: '100vh' }}>
+		<Layout style={{ minHeight: '100vh', backgroundColor: '#f6e5e8' }}>
 			<Navbar />
 
 			<Layout.Content style={{ paddingTop: 20, height: '100%' }}>

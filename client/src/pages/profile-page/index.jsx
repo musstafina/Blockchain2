@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useBlog } from '../../app/solana'
 import { PostsList } from '../../components/posts'
 import { UserCard } from '../../components/user-card'
@@ -18,23 +19,14 @@ const friends = [
 ]
 
 const ProfilePage = () => {
+	const navigate = useNavigate()
 	const { getMyProfile, getAllPosts } = useBlog()
 	const wallet = useWallet()
 	const [user, setUser] = useState(null)
 	const [posts, setPosts] = useState([])
 
 	useEffect(() => {
-		getMyProfile().then(data => {
-			if (data) {
-				console.log(data)
-				setUser({
-					name: data.name,
-					avatar: data.avatar,
-					friends: data.friends,
-					friendRequests: data.friendRequests,
-				})
-			}
-		})
+		getMyProfile().then(data => setUser(data))
 	}, [])
 
 	useEffect(() => {
@@ -57,7 +49,7 @@ const ProfilePage = () => {
 
 	if (!user) return null
 
-	const { name, avatar } = user
+	const { name, avatar, friendRequests, friends } = user
 
 	return (
 		<>
@@ -78,12 +70,12 @@ const ProfilePage = () => {
 						<Typography.Title level={2} style={{ marginLeft: 6, fontSize: 15 }}>
 							Friends
 						</Typography.Title>
-						<UserList />
+						<UserList users={friends} />
 						<Divider />
 						<Typography.Title level={2} style={{ marginLeft: 6, fontSize: 15 }}>
 							Friend requests
 						</Typography.Title>
-						<UserList />
+						<UserList users={friendRequests} />
 					</Card>
 				</Col>
 			</Row>

@@ -6,7 +6,7 @@ const CreatePostPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Find users</title>
+				<title>Create post</title>
 			</Helmet>
 			<Row className='mt-5'>
 				<Col offset={6} span={12}>

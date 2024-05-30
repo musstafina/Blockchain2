@@ -44,18 +44,7 @@ export const BlogProvider = ({ children }) => {
 	}, [connection, anchorWallet])
 
 	const getMyProfile = async () => {
-		if (!program || !publicKey) return
-
-		try {
-			const [userPda] = findProgramAddressSync(
-				[utf8.encode('user'), publicKey.toBuffer()],
-				program.programId
-			)
-			const user = await program.account.userAccount.fetch(userPda)
-			return user
-		} catch (err) {
-			console.log('no user', err)
-		}
+		return getUserByWalletAddress(publicKey)
 	}
 
 	const initUser = async (name, avatar) => {
@@ -121,7 +110,8 @@ export const BlogProvider = ({ children }) => {
 		}
 	}
 
-	const getUserByPublicKey = async publicKey => {
+	const getUserByWalletAddressWithoutFriends = async walletAddress => {
+		const publicKey = new PublicKey(walletAddress)
 		if (!program || !publicKey) return
 
 		try {
@@ -131,6 +121,38 @@ export const BlogProvider = ({ children }) => {
 			)
 			const user = await program.account.userAccount.fetch(userPda)
 			return user
+		} catch (err) {
+			console.log('no user', err)
+		}
+	}
+
+	const getUserByWalletAddress = async walletAddress => {
+		if (!program || !publicKey) return
+
+		try {
+			const user = await getUserByWalletAddressWithoutFriends(walletAddress)
+			const friendRequests = await Promise.all(
+				user.friendRequests.map(pubKey =>
+					getUserByWalletAddressWithoutFriends(pubKey)
+				)
+			)
+			const friends = await Promise.all(
+				user.friends.map(pubKey => getUserByWalletAddressWithoutFriends(pubKey))
+			)
+			return {
+				name: user.name,
+				avatar: user.avatar,
+				friends: friends.map(user => ({
+					name: user.name,
+					avatar: user.avatar,
+					authority: user.authority.toString(),
+				})),
+				friendRequests: friendRequests.map(user => ({
+					name: user.name,
+					avatar: user.avatar,
+					authority: user.authority.toString(),
+				})),
+			}
 		} catch (err) {
 			console.log('no user', err)
 		}
@@ -151,16 +173,67 @@ export const BlogProvider = ({ children }) => {
 		if (!program || !publicKey) return
 		const receiverPublicKey = new PublicKey(receiverWalletAddress)
 		try {
-			const [userPda] = findProgramAddressSync(
+			const [senderPda] = findProgramAddressSync(
 				[utf8.encode('user'), publicKey.toBuffer()],
+				program.programId
+			)
+			const [receiverPda] = findProgramAddressSync(
+				[utf8.encode('user'), receiverPublicKey.toBuffer()],
 				program.programId
 			)
 			await program.methods
 				.sendFriendRequest()
 				.accounts({
-					sender: userPda,
-					receiver: receiverPublicKey,
+					sender: senderPda,
+					receiver: receiverPda,
 					authority: publicKey,
+				})
+				.rpc()
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+	const getFriendStatus = async walletAddress => {
+		const profileData = await getMyProfile()
+		const requestedFriend = profileData.friendRequests.find(
+			user => user.authority === walletAddress
+		)
+		if (requestedFriend) {
+			return 'requested'
+		}
+
+		const friend = profileData.friends.find(
+			user => user.authority === walletAddress
+		)
+		if (friend) {
+			return 'friend'
+		}
+
+		return 'not_friend'
+	}
+
+	const acceptRequest = async walletAddress => {
+		if (!program || !publicKey) return
+		const friendPublicKey = new PublicKey(walletAddress)
+		try {
+			const [userPda] = findProgramAddressSync(
+				[utf8.encode('user'), publicKey.toBuffer()],
+				program.programId
+			)
+			const [friendPda] = findProgramAddressSync(
+				[utf8.encode('user'), friendPublicKey.toBuffer()],
+				program.programId
+			)
+
+			await program.methods
+				.respondToFriendRequest(true)
+				.accounts({
+					userAccount: userPda,
+					friendAccount: friendPda,
+					authority: publicKey,
+					friend: friendPublicKey,
+					systemProgram: SystemProgram.programId,
 				})
 				.rpc()
 		} catch (err) {
@@ -175,9 +248,11 @@ export const BlogProvider = ({ children }) => {
 				initUser,
 				initPost,
 				getAllPosts,
-				getUserByPublicKey,
+				getUserByWalletAddress,
 				getAllUsers,
 				sendFriendRequest,
+				getFriendStatus,
+				acceptRequest,
 			}}
 		>
 			{children}

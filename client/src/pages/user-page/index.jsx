@@ -1,35 +1,39 @@
 import { Button, Card, Col, Row, Typography } from 'antd'
 import { Helmet } from 'react-helmet'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useBlog } from '../../app/solana'
 
-import { PublicKey } from '@solana/web3.js'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useState } from 'react'
 import { PostsList } from '../../components/posts'
 import { UserCard } from '../../components/user-card'
 import { UserList } from '../../components/user-list'
 
 const UserPage = () => {
-	const { getUserByPublicKey, getAllPosts, sendFriendRequest } = useBlog()
+	const navigate = useNavigate()
+	const {
+		getUserByWalletAddress,
+		getAllPosts,
+		sendFriendRequest,
+		getFriendStatus,
+		acceptRequest,
+	} = useBlog()
+	const wallet = useWallet()
 	const { publicKey } = useParams()
 	const [user, setUser] = useState(null)
 	const [posts, setPosts] = useState([])
-
-	console.log(user)
+	const [friendStatus, setFriendStatus] = useState()
 
 	useEffect(() => {
-		getUserByPublicKey(new PublicKey(publicKey)).then(user => {
-			if (user) {
-				console.log('user:', user)
-				setUser({
-					authority: user.authority.toString(),
-					name: user.name,
-					avatar: user.avatar,
-					userPublicKey: user.publicKey,
-				})
-			}
-		})
+		if (wallet.publicKey.toString() === publicKey) {
+			navigate('/me')
+		}
+	}, [publicKey])
+
+	useEffect(() => {
+		getUserByWalletAddress(publicKey).then(user => setUser(user))
+		getFriendStatus(publicKey).then(result => setFriendStatus(result))
 	}, [publicKey])
 
 	useEffect(() => {
@@ -62,6 +66,10 @@ const UserPage = () => {
 		await sendFriendRequest(authority.toString())
 	}
 
+	const onAcceptFriendRequest = async () => {
+		await acceptRequest(publicKey)
+	}
+
 	return (
 		<>
 			<Helmet>
@@ -71,9 +79,16 @@ const UserPage = () => {
 			<Row>
 				<Col offset={2} span={4}>
 					<UserCard name={name} avatar={avatar} />
-					<Button onClick={onSendFriendRequest} className='mt-2 ms-1'>
-						Add to friends
-					</Button>
+					{friendStatus === 'requested' && (
+						<Button onClick={onAcceptFriendRequest} className='mt-2 ms-1'>
+							Accept request
+						</Button>
+					)}
+					{friendStatus === 'not_friend' && (
+						<Button onClick={onSendFriendRequest} className='mt-2 ms-1'>
+							Add to friends
+						</Button>
+					)}
 				</Col>
 				<Col offset={1} span={10}>
 					<PostsList posts={posts} />
