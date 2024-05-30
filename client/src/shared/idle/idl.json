@@ -30,6 +30,24 @@
 				{ "name": "title", "type": "string" },
 				{ "name": "content", "type": "string" }
 			]
+		},
+		{
+			"name": "sendFriendRequest",
+			"accounts": [
+				{ "name": "sender", "isMut": true, "isSigner": false },
+				{ "name": "receiver", "isMut": true, "isSigner": false },
+				{ "name": "authority", "isMut": false, "isSigner": true }
+			],
+			"args": []
+		},
+		{
+			"name": "acceptFriendRequest",
+			"accounts": [
+				{ "name": "sender", "isMut": true, "isSigner": false },
+				{ "name": "receiver", "isMut": true, "isSigner": false },
+				{ "name": "authority", "isMut": false, "isSigner": true }
+			],
+			"args": []
 		}
 	],
 	"accounts": [
@@ -42,7 +60,9 @@
 					{ "name": "avatar", "type": "string" },
 					{ "name": "authority", "type": "publicKey" },
 					{ "name": "lastPostId", "type": "u8" },
-					{ "name": "postCount", "type": "u8" }
+					{ "name": "postCount", "type": "u8" },
+					{ "name": "friendRequests", "type": { "vec": "publicKey" } },
+					{ "name": "friends", "type": { "vec": "publicKey" } }
 				]
 			}
 		},
@@ -58,6 +78,18 @@
 					{ "name": "authority", "type": "publicKey" }
 				]
 			}
+		}
+	],
+	"errors": [
+		{
+			"code": 6000,
+			"name": "FriendRequestAlreadySent",
+			"msg": "Friend request already sent"
+		},
+		{
+			"code": 6001,
+			"name": "FriendRequestNotFound",
+			"msg": "Friend request not found"
 		}
 	],
 	"metadata": {

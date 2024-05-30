@@ -1,4 +1,4 @@
-import { Card, Col, Row, Typography } from 'antd'
+import { Button, Card, Col, Row, Typography } from 'antd'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 
@@ -11,20 +11,39 @@ import { UserCard } from '../../components/user-card'
 import { UserList } from '../../components/user-list'
 
 const UserPage = () => {
-	const { getUserByPublicKey } = useBlog()
+	const { getUserByPublicKey, getAllPosts, sendFriendRequest } = useBlog()
 	const { publicKey } = useParams()
 	const [user, setUser] = useState(null)
+	const [posts, setPosts] = useState([])
 
 	useEffect(() => {
 		getUserByPublicKey(new PublicKey(publicKey)).then(user => {
 			if (user) {
 				setUser({
+					authority: user.authority.toString(),
 					name: user.name,
 					avatar: user.avatar,
+					userPublicKey: useBlog.publicKey.toString(),
 				})
 			}
 		})
-	})
+	}, [])
+
+	useEffect(() => {
+		getAllPosts().then(posts => {
+			if (posts) {
+				posts = posts.map(post => ({
+					authority: post.account.authority.toString(),
+					title: post.account.title,
+					content: post.account.content,
+				}))
+
+				posts = posts.filter(post => post.authority === publicKey)
+
+				setPosts(posts)
+			}
+		})
+	}, [])
 
 	if (!user) {
 		return (
@@ -34,7 +53,11 @@ const UserPage = () => {
 		)
 	}
 
-	const { avatar, name } = user
+	const { avatar, name, userPublicKey } = user
+
+	const onSendFriendRequest = async () => {
+		await sendFriendRequest(userPublicKey)
+	}
 
 	return (
 		<>
@@ -45,9 +68,12 @@ const UserPage = () => {
 			<Row>
 				<Col offset={2} span={4}>
 					<UserCard name={name} avatar={avatar} />
+					<Button onClick={onSendFriendRequest} className='mt-2 ms-1'>
+						Add to friends
+					</Button>
 				</Col>
 				<Col offset={1} span={10}>
-					<PostsList />
+					<PostsList posts={posts} />
 				</Col>
 
 				<Col offset={1} span={4}>
