@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 export const UserList = ({ users, altLabel, ...props }) => {
+	console.log(users)
 	return (
 		<List
 			{...props}
@@ -14,7 +15,7 @@ export const UserList = ({ users, altLabel, ...props }) => {
 						avatar={<Avatar src={user.avatar} />}
 						title={
 							<Link
-								to={`/users/${user.publicKey}`}
+								to={`/users/${user.authority}`}
 								style={{ textDecoration: 'none' }}
 							>
 								<Typography.Text>{user.name}</Typography.Text>

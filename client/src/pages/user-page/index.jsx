@@ -16,18 +16,21 @@ const UserPage = () => {
 	const [user, setUser] = useState(null)
 	const [posts, setPosts] = useState([])
 
+	console.log(user)
+
 	useEffect(() => {
 		getUserByPublicKey(new PublicKey(publicKey)).then(user => {
 			if (user) {
+				console.log('user:', user)
 				setUser({
 					authority: user.authority.toString(),
 					name: user.name,
 					avatar: user.avatar,
-					userPublicKey: useBlog.publicKey.toString(),
+					userPublicKey: user.publicKey,
 				})
 			}
 		})
-	}, [])
+	}, [publicKey])
 
 	useEffect(() => {
 		getAllPosts().then(posts => {
@@ -53,10 +56,10 @@ const UserPage = () => {
 		)
 	}
 
-	const { avatar, name, userPublicKey } = user
+	const { avatar, name, authority } = user
 
 	const onSendFriendRequest = async () => {
-		await sendFriendRequest(userPublicKey)
+		await sendFriendRequest(authority.toString())
 	}
 
 	return (
