@@ -3,18 +3,34 @@ import { Link, useLocation } from 'react-router-dom'
 
 const items = [
 	{
-		key: '/',
+		key: '/auth/register',
 		label: (
-			<Link style={{ textDecoration: 'none' }} to='/'>
-				home
+			<Link style={{ textDecoration: 'none' }} to='/auth/register'>
+				register
 			</Link>
 		),
 	},
 	{
-		key: '/find-user',
+		key: '/auth/login',
 		label: (
-			<Link style={{ textDecoration: 'none' }} to='/find-user'>
-				find user
+			<Link style={{ textDecoration: 'none' }} to='/auth/login'>
+				login
+			</Link>
+		),
+	},
+	{
+		key: '/',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/'>
+				all posts
+			</Link>
+		),
+	},
+	{
+		key: '/users',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/users'>
+				all users
 			</Link>
 		),
 	},
@@ -23,6 +39,14 @@ const items = [
 		label: (
 			<Link style={{ textDecoration: 'none' }} to='/me'>
 				profile
+			</Link>
+		),
+	},
+	{
+		key: '/create-post',
+		label: (
+			<Link style={{ textDecoration: 'none' }} to='/create-post'>
+				create post
 			</Link>
 		),
 	},
@@ -38,6 +62,7 @@ export const Navbar = () => {
 				items={items}
 				mode='horizontal'
 				selectedKeys={[pathname]}
+				style={{ width: '100%' }}
 			/>
 		</Layout.Header>
 	)

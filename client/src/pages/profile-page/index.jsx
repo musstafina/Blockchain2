@@ -1,11 +1,11 @@
 import { Card, Col, Divider, Row, Typography } from 'antd'
 import { Helmet } from 'react-helmet'
 
-import { LogoutButton } from '../../components/logout-button'
-import { PostsList } from '../../components/posts-list'
+import { useEffect, useState } from 'react'
+import { useBlog } from '../../app/solana'
+import { PostsList } from '../../components/posts'
 import { UserCard } from '../../components/user-card'
 import { UserList } from '../../components/user-list'
-import { useUserProfileQuery } from '../../shared/api/user-api-slice'
 
 const friends = [
 	{
@@ -17,29 +17,33 @@ const friends = [
 ]
 
 const ProfilePage = () => {
-	const { data, isLoading } = useUserProfileQuery()
+	const { getMyProfile } = useBlog()
+	const [user, setUser] = useState(null)
 
-	if (isLoading) return null
+	useEffect(() => {
+		getMyProfile().then(data => {
+			if (data) {
+				setUser({
+					name: data.name,
+					avatar: data.avatar,
+				})
+			}
+		})
+	}, [])
 
-	const { firstName, lastName, email, personalPhoto } = data
+	if (!user) return null
+
+	const { name, avatar } = user
 
 	return (
 		<>
 			<Helmet>
-				<title>
-					{firstName} {lastName}
-				</title>
+				<title>{name}</title>
 			</Helmet>
 
 			<Row>
 				<Col offset={2} span={4}>
-					<UserCard
-						firstName={firstName}
-						lastName={lastName}
-						email={email}
-						profilePicture={personalPhoto}
-					/>
-					<LogoutButton />
+					<UserCard name={name} avatar={avatar} />
 				</Col>
 				<Col offset={1} span={10}>
 					<PostsList />

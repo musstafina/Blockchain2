@@ -2,59 +2,32 @@ import { Button, Typography } from 'antd'
 import { Form, Formik } from 'formik'
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
+import { useBlog } from '../../app/solana'
 
-import { useSelector } from 'react-redux'
-import { CONNECTED_STATUS } from '../../shared/constants/wallet-loading-statuses'
-import {
-	selectWalletAddress,
-	selectWalletAddressLoadingStatus,
-} from '../../shared/slices/user-slice'
-import { ConnectWalletButton } from '../connect-wallet-button'
 import { TextInput } from './Text-input'
 
 const initialValues = {
-	firstName: '',
-	lastName: '',
-	email: '',
-	password: '',
-	biography: '',
-	personalPhoto: '',
+	name: '',
+	avatar: '',
 }
 
 const validationSchema = yup.object({
-	firstName: yup.string().required('first name is required'),
-	lastName: yup.string().required('last name is required'),
-	email: yup.string().required('email is required'),
-	password: yup.string().required('password is required'),
-	biography: yup.string(),
-	personalPhoto: yup.string(),
+	name: yup.string().required('first name is required'),
+	avatar: yup.string(),
 })
 
 export const RegisterForm = () => {
-	const walletStatus = useSelector(selectWalletAddressLoadingStatus)
-	const walletAddress = useSelector(selectWalletAddress)
+	const { initUser } = useBlog()
 	const navigate = useNavigate()
 
 	const onSubmit = async values => {
-		console.log(values)
-		const fetchOptions = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			mode: 'cors',
-			body: JSON.stringify({
-				...values,
-				walletAddress,
-			}),
-		}
-		const response = await fetch(
-			'http://localhost:6600/api/register',
-			fetchOptions
-		)
-
-		if (response.status === 201) {
-			navigate('/auth/login')
+		// TODO: test this
+		try {
+			const { name, avatar } = values
+			await initUser(name, avatar)
+			navigate('/')
+		} catch (err) {
+			console.log(err)
 		}
 	}
 	return (
@@ -68,19 +41,13 @@ export const RegisterForm = () => {
 					Register
 				</Typography.Title>
 
-				<TextInput name='firstName' label={'enter firstName'} />
-				<TextInput name='lastName' label={'enter lastName'} />
-				<TextInput name='email' label={'enter email'} />
-				<TextInput name='password' type='password' label={'enter password'} />
-				<TextInput name='biography' label={'enter biography'} />
-				<TextInput name='personalPhoto' label={'enter profilePicture'} />
-				<ConnectWalletButton type={'text'} className={'w-100 mt-3'} />
+				<TextInput name='name' label={'enter name'} />
+				<TextInput name='avatar' label={'enter avatar url'} />
 
 				<Button
 					type='primary'
 					htmlType='submit'
 					style={{ margin: '20px auto 0', display: 'block' }}
-					disabled={walletStatus !== CONNECTED_STATUS}
 				>
 					Register
 				</Button>

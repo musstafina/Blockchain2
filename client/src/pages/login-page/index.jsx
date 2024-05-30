@@ -1,20 +1,16 @@
+import { WalletModalButton } from '@solana/wallet-adapter-react-ui'
 import { Helmet } from 'react-helmet'
-
-import { Col, Row } from 'antd'
-import { LoginForm } from '../../components/auth-forms'
 
 const LoginPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Login</title>
+				<title>Connect wallet</title>
 			</Helmet>
 
-			<Row>
-				<Col offset={8} span={8}>
-					<LoginForm />
-				</Col>
-			</Row>
+			<div className='d-flex justify-content-center mt-5'>
+				<WalletModalButton />
+			</div>
 		</>
 	)
 }

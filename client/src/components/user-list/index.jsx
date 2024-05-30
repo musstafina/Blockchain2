@@ -11,15 +11,13 @@ export const UserList = ({ users, altLabel, ...props }) => {
 			renderItem={user => (
 				<List.Item>
 					<List.Item.Meta
-						avatar={<Avatar src={user.personalPhoto} />}
+						avatar={<Avatar src={user.avatar} />}
 						title={
 							<Link
-								to={`/users/${user._id}`}
+								to={`/users/${user.publicKey}`}
 								style={{ textDecoration: 'none' }}
 							>
-								<Typography.Text>
-									{user.firstName} {user.lastName}
-								</Typography.Text>
+								<Typography.Text>{user.name}</Typography.Text>
 							</Link>
 						}
 					/>
@@ -32,10 +30,9 @@ UserList.propTypes = {
 	altLabel: PropTypes.string,
 	users: PropTypes.arrayOf(
 		PropTypes.shape({
-			_id: PropTypes.string,
-			firstName: PropTypes.string,
-			lastName: PropTypes.string,
-			personalPhoto: PropTypes.string,
+			publicKey: PropTypes.string,
+			name: PropTypes.string,
+			avatar: PropTypes.string,
 		})
 	),
 }
