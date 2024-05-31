@@ -241,6 +241,45 @@ export const BlogProvider = ({ children }) => {
 		}
 	}
 
+	const addComment = async (
+		content,
+		lastCommentId,
+		postAccountAuthority,
+		postId
+	) => {
+		if (!program || !publicKey) return
+		postAccountAuthority = new PublicKey(postAccountAuthority)
+		try {
+			const [commentPda] = findProgramAddressSync(
+				[
+					utf8.encode('post'),
+					publicKey.toBuffer(),
+					Uint8Array.from([lastCommentId]),
+				],
+				program.programId
+			)
+			const [postPda] = findProgramAddressSync(
+				[
+					utf8.encode('post'),
+					postAccountAuthority.toBuffer(),
+					Uint8Array.from([postId]),
+				],
+				program.programId
+			)
+			await program.methods
+				.addComment(content)
+				.accounts({
+					commentAccount: commentPda,
+					postAccount: postPda,
+					authority: publicKey,
+					systemProgram: SystemProgram.programId,
+				})
+				.rpc()
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	return (
 		<BlogContext.Provider
 			value={{
@@ -253,6 +292,7 @@ export const BlogProvider = ({ children }) => {
 				sendFriendRequest,
 				getFriendStatus,
 				acceptRequest,
+				addComment,
 			}}
 		>
 			{children}

@@ -12,11 +12,16 @@ const HomePage = () => {
 	useEffect(() => {
 		getAllPosts().then(posts => {
 			if (posts) {
+				console.log('posts:', posts)
 				setPosts(
-					posts.map(({ account }) => ({
-						id: account.id,
-						title: account.title,
-						content: account.content,
+					posts.map(post => ({
+						id: post.account.id,
+						title: post.account.title,
+						content: post.account.content,
+						authority: post.account.authority.toString(),
+						lastCommentId: post.account.lastCommentId,
+						publicKey: post.publicKey.toString(),
+						user: post.account.user.toString(),
 					}))
 				)
 			}

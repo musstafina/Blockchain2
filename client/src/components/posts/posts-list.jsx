@@ -6,8 +6,8 @@ export const PostsList = ({ posts = [] }) => {
 		<div
 			style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
 		>
-			{posts.map(({ id, title, content }) => (
-				<PostCard key={id} title={title} content={content} />
+			{posts.map(post => (
+				<PostCard key={post.id} {...post} />
 			))}
 		</div>
 	)
@@ -18,6 +18,10 @@ PostsList.propTypes = {
 			id: PropTypes.number,
 			title: PropTypes.string,
 			content: PropTypes.string,
+			authority: PropTypes.string,
+			commentCount: PropTypes.number,
+			lastCommentId: PropTypes.number,
+			user: PropTypes.string,
 		})
 	),
 }
