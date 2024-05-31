@@ -31,6 +31,8 @@ const UserPage = () => {
 		}
 	}, [publicKey])
 
+	console.log(user)
+
 	useEffect(() => {
 		getUserByWalletAddress(publicKey).then(user => setUser(user))
 		getFriendStatus(publicKey).then(result => setFriendStatus(result))
@@ -60,7 +62,7 @@ const UserPage = () => {
 		)
 	}
 
-	const { avatar, name } = user
+	const { avatar, name, friends } = user
 	console.log(user)
 
 	const onSendFriendRequest = async () => {
@@ -100,7 +102,7 @@ const UserPage = () => {
 						<Typography.Title level={2} style={{ marginLeft: 6, fontSize: 15 }}>
 							Friends
 						</Typography.Title>
-						<UserList />
+						<UserList users={friends} />
 					</Card>
 				</Col>
 			</Row>
