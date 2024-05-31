@@ -32,6 +32,16 @@
 			]
 		},
 		{
+			"name": "addComment",
+			"accounts": [
+				{ "name": "commentAccount", "isMut": true, "isSigner": false },
+				{ "name": "postAccount", "isMut": true, "isSigner": false },
+				{ "name": "authority", "isMut": true, "isSigner": true },
+				{ "name": "systemProgram", "isMut": false, "isSigner": false }
+			],
+			"args": [{ "name": "content", "type": "string" }]
+		},
+		{
 			"name": "sendFriendRequest",
 			"accounts": [
 				{ "name": "sender", "isMut": true, "isSigner": false },
@@ -86,7 +96,22 @@
 					{ "name": "title", "type": "string" },
 					{ "name": "content", "type": "string" },
 					{ "name": "user", "type": "publicKey" },
-					{ "name": "authority", "type": "publicKey" }
+					{ "name": "authority", "type": "publicKey" },
+					{ "name": "lastCommentId", "type": "u8" },
+					{ "name": "commentCount", "type": "u8" }
+				]
+			}
+		},
+		{
+			"name": "CommentAccount",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{ "name": "id", "type": "u8" },
+					{ "name": "post", "type": "publicKey" },
+					{ "name": "user", "type": "publicKey" },
+					{ "name": "authority", "type": "publicKey" },
+					{ "name": "content", "type": "string" }
 				]
 			}
 		}
@@ -104,6 +129,6 @@
 		}
 	],
 	"metadata": {
-		"address": "BLzM71nsqSUnF7wdtBQ8GazSx1TnV9ozHtzXHNtZuupa"
+		"address": "7Atvb4ybmxJ65ZCbpJrLt5bwTtPSkU3u5pPSTnpMUEkF"
 	}
 }

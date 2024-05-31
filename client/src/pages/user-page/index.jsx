@@ -60,10 +60,11 @@ const UserPage = () => {
 		)
 	}
 
-	const { avatar, name, authority } = user
+	const { avatar, name } = user
+	console.log(user)
 
 	const onSendFriendRequest = async () => {
-		await sendFriendRequest(authority.toString())
+		await sendFriendRequest(publicKey)
 	}
 
 	const onAcceptFriendRequest = async () => {
