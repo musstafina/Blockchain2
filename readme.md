@@ -70,19 +70,16 @@ npm run dev
 
 #### Register page
 
-![Register page](readme/register-page.jpg)
+![Register page](readme/register-page.png)
 
-#### Login page
+#### Connection  page
 
-![Register page](readme/login-page.jpg)
+![Register page](readme/connection.png)
 
-#### Home page
-
-![alt text](readme/home-page.jpg)
 
 #### Profile page
 
-![alt text](readme/profile-page.jpg)
+![alt text](readme/profile-page.png)
 
 #### Blockchain wallet
 
