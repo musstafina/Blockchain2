@@ -22,27 +22,6 @@ git clone https://github.com/musstafina/Blockchain2
 cd Blockchain2
 ```
 
-### Server Setup
-
-1. Navigate to the `server` directory.
-
-```
-cd server
-```
-
-2. Run `npm install` to install dependencies.
-
-```
-npm install
-```
-
-3. Once the installation is complete, run `npm start` to start the Express server.
-
-```
-node app.js
-```
-
-4. The server will be running on `http://localhost:6600` by default.
 
 ### Client Setup
 
